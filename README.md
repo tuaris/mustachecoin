@@ -3,8 +3,8 @@ mustachecoin
 
 Algorithm: Scrypt<br>
 Target of maintaining approximately 100,000,000,000 MUSTACHE in circulation after 1.5 years<br>
-Block Time: 60 Seconds<br>
-Difficulty Retarget Time: 4 hours<br>
+Block Time: 2 Seconds<br>
+Difficulty Retarget Time: 8 hours<br>
 Premine: None<br>
  
 much reward<br>
