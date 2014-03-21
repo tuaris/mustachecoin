@@ -1995,7 +1995,7 @@ bool LoadBlockIndex(bool fAllowNew)
         pchMessageStart[1] = 0xc1;
         pchMessageStart[2] = 0xb7;
         pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0x");
+        hashGenesisBlock = uint256("0xe681758b82dc4f07475d11cb6569928f61985643fa22a02994abe0273542cf67");
     }
 
     //
@@ -2045,14 +2045,14 @@ bool LoadBlockIndex(bool fAllowNew)
         if (fTestNet)
         {
             block.nTime    = 1395424016;
-            block.nNonce   = 0;
+            block.nNonce   = 938330;
         }
 
         //// debug print
         printf("block.GetHash() = %s\n", block.GetHash().ToString().c_str());
         printf("hashGenesisBlock = %s\n", hashGenesisBlock.ToString().c_str());
         printf("block.hashMerkleRoot = %s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x5b2a3f53f605d62c53e62932dac6925e3d74afa5a4b459745c36d42d0ed26a69"));
+        assert(block.hashMerkleRoot == uint256("0x4f60341bbaa6449229f6c8e29e13d0638eda09b0573185a0648934098342113a"));
 
 if (true && block.GetHash() != hashGenesisBlock)
         {
