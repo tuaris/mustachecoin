@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2012 Litecoin Developers
-// Copyright (c) 2013 mustachecoin Developers
+// Copyright (c) 2013 pacycoin Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1062,7 +1062,7 @@ void ThreadMapPort2(void* parg)
             }
         }
 
-        string strDesc = "mustachecoin " + FormatFullVersion();
+        string strDesc = "pacycoin " + FormatFullVersion();
 #ifndef UPNPDISCOVER_SUCCESS
         /* miniupnpc 1.5 */
         r = UPNP_AddPortMapping(urls.controlURL, data.first.servicetype,
@@ -1145,8 +1145,8 @@ void MapPort()
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
        // default hypernode dns seed , change later when network grows
-       {"199.175.51.243", "199.175.51.243"},
-	   {"199.175.51.243:1999", "199.175.51.243:1999"},
+       {"venus.morante.net", "earth.morante.net"},
+	   {"venus.morante.net:17777", "earth.morante.net:17777"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1425,7 +1425,7 @@ void ThreadOpenAddedConnections(void* parg)
     IMPLEMENT_RANDOMIZE_STACK(ThreadOpenAddedConnections(parg));
 
     // Make this thread recognisable as the connection opening thread
-    RenameThread("mustachecoin-opencon");
+    RenameThread("pacycoin-opencon");
 
     try
     {
@@ -1722,7 +1722,7 @@ bool BindListenPort(const CService &addrBind, string& strError)
     {
         int nErr = WSAGetLastError();
         if (nErr == WSAEADDRINUSE)
-            strError = strprintf(_("Unable to bind to %s on this computer. mustachecoin is probably already running."), addrBind.ToString().c_str());
+            strError = strprintf(_("Unable to bind to %s on this computer. pacycoin is probably already running."), addrBind.ToString().c_str());
         else
             strError = strprintf(_("Unable to bind to %s on this computer (bind returned error %d, %s)"), addrBind.ToString().c_str(), nErr, strerror(nErr));
         printf("%s\n", strError.c_str());
@@ -1803,7 +1803,7 @@ void static Discover()
 void StartNode(void* parg)
 {
     // Make this thread recognisable as the startup thread
-    RenameThread("mustachecoin-start");
+    RenameThread("pacycoin-start");
 
     if (semOutbound == NULL) {
         // initialize semaphore

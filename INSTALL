@@ -1,9 +1,9 @@
-Building mustachecoin
+Building pacycoin
 
-See doc/readme-qt.rst for instructions on building mustachecoin-QT,
+See doc/readme-qt.rst for instructions on building pacycoin-QT,
 the intended-for-end-users, nice-graphical-interface, reference
-implementation of mustachecoin.
+implementation of pacycoin.
 
-See doc/build-*.txt for instructions on building mustachecoind,
+See doc/build-*.txt for instructions on building pacycoind,
 the intended-for-services, no-graphical-interface, reference
-implementation of mustachecoin.
+implementation of pacycoin.

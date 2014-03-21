@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2011-2012 Litecoin Developers
-// Copyright (c) 2013 mustachecoin Developers
+// Copyright (c) 2013 pacycoin Developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -34,7 +34,7 @@ unsigned int nTransactionsUpdated = 0;
 map<uint256, CBlockIndex*> mapBlockIndex;
 
 uint256 hashGenesisBlock = hashGenesisBlockOfficial;
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // mustachecoin: starting difficulty is 1 / 2^12
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // pacycoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainWork = 0;
@@ -54,7 +54,7 @@ map<uint256, map<uint256, CDataStream*> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "mustachecoin Signed Message:\n";
+const string strMessageMagic = "pacycoin Signed Message:\n";
 
 double dHashesPerSec;
 int64 nHPSTimerStart;
@@ -830,81 +830,14 @@ uint256 static GetOrphanRoot(const CBlock* pblock)
     return pblock->GetHash();
 }
 
-
-int static generateMTRandom(unsigned int s, int range)
+int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-	random::mt19937 gen(s);
-    random::uniform_int_distribution<> dist(1, range);
-    return dist(gen);
+		int64 nSubsidy = 33 * COIN;
+		return nSubsidy + nFees;
 }
 
-
-int64 static GetBlockValue(int nHeight, int64 nFees, uint256 prevHash)
-{
-        int64 nSubsidy = 500 * COIN;
-         
-        std::string cseed_str = prevHash.ToString().substr(7,7);
-        const char* cseed = cseed_str.c_str();
-        long seed = hex2long(cseed);
-        int rand = generateMTRandom(seed, 999999);
-        int rand1 = 0;
-        int rand2 = 0;
-        int rand3 = 0;
-        int rand4 = 0;
-        int rand5 = 0;
-       
-        if(nHeight < 100000)    
-        {
-                nSubsidy = (1 + rand) * COIN;
-        }
-        else if(nHeight < 200000)      
-        {
-                cseed_str = prevHash.ToString().substr(7,7);
-                cseed = cseed_str.c_str();
-                seed = hex2long(cseed);
-                rand1 = generateMTRandom(seed, 499999);
-                nSubsidy = (1 + rand1) * COIN;
-        }
-        else if(nHeight < 300000)      
-        {
-                cseed_str = prevHash.ToString().substr(6,7);
-                cseed = cseed_str.c_str();
-                seed = hex2long(cseed);
-                rand2 = generateMTRandom(seed, 249999);
-                nSubsidy = (1 + rand2) * COIN;
-        }
-        else if(nHeight < 400000)      
-        {
-                cseed_str = prevHash.ToString().substr(7,7);
-                cseed = cseed_str.c_str();
-                seed = hex2long(cseed);
-                rand3 = generateMTRandom(seed, 124999);
-                nSubsidy = (1 + rand3) * COIN;
-        }
-        else if(nHeight < 500000)      
-        {
-                cseed_str = prevHash.ToString().substr(7,7);
-                cseed = cseed_str.c_str();
-                seed = hex2long(cseed);
-                rand4 = generateMTRandom(seed, 62499);
-                nSubsidy = (1 + rand4) * COIN;
-        }
-        else if(nHeight < 600000)      
-        {
-                cseed_str = prevHash.ToString().substr(6,7);
-                cseed = cseed_str.c_str();
-                seed = hex2long(cseed);
-                rand5 = generateMTRandom(seed, 31249);
-                nSubsidy = (1 + rand5) * COIN;
-        }
- 
-    return nSubsidy + nFees;
-}
-
-
-
-static const int64 nTargetTimespan = 8 * 60 * 60; // mustachecoin: every 8 hours
-static const int64 nTargetSpacing = 2; // mustachecoin: 1 minutes
+static const int64 nTargetSpacing = 7 * 60; // PacyCoin: 7 minutes
+static const int64 nTargetTimespan = 33 * 60; // PacyCoin: every 33 minutes
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 //
@@ -963,7 +896,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
         return pindexLast->nBits;
     }
 
-    // mustachecoin: This fixes an issue where a 51% attack can change difficulty at will.
+    // pacycoin: This fixes an issue where a 51% attack can change difficulty at will.
     // Go back the full period unless it's the first retarget after genesis. Code courtesy of Art Forz
     int blockstogoback = nInterval-1;
     if ((pindexLast->nHeight+1) != nInterval)
@@ -1253,7 +1186,7 @@ bool CTransaction::ConnectInputs(MapPrevTx inputs,
 {
     // Take over previous transactions' spent pointers
     // fBlock is true when this is called from AcceptBlock when a new best-block is added to the blockchain
-    // fMiner is true when called from the internal mustachecoin miner
+    // fMiner is true when called from the internal pacycoin miner
     // ... both are false when called from CTransaction::AcceptToMemoryPool
     if (!IsCoinBase())
     {
@@ -1496,7 +1429,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex)
 		prevHash = pindex->pprev->GetBlockHash();
 	}
 
-    if (vtx[0].GetValueOut() > GetBlockValue(pindex->nHeight, nFees, prevHash))
+    if (vtx[0].GetValueOut() > GetBlockValue(pindex->nHeight, nFees))
         return false;
 
     // Update block index on disk without changing it in memory.
@@ -2006,7 +1939,7 @@ bool CheckDiskSpace(uint64 nAdditionalBytes)
         string strMessage = _("Warning: Disk space is low");
         strMiscWarning = strMessage;
         printf("*** %s\n", strMessage.c_str());
-        uiInterface.ThreadSafeMessageBox(strMessage, "mustachecoin", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+        uiInterface.ThreadSafeMessageBox(strMessage, "pacycoin", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
         StartShutdown();
         return false;
     }
@@ -2092,7 +2025,7 @@ bool LoadBlockIndex(bool fAllowNew)
 		//   vMerkleTree: 6f80efd038 
 
         // Genesis block
-        const char* pszTimestamp = "Nintondo";
+        const char* pszTimestamp = "PacyWorld";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2104,14 +2037,14 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1386325540;
+        block.nTime    = 1395424016;
         block.nBits    = 0x1e0ffff0;
         block.nNonce   = 99943;
 
 
         if (fTestNet)
         {
-            block.nTime    = 1386325540;
+            block.nTime    = 1395424016;
             block.nNonce   = 0;
         }
 
@@ -3549,7 +3482,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
                 continue;
 
             // Transaction fee required depends on block size
-            // mustachecoind: Reduce the exempted free transactions to 500 bytes (from Bitcoin's 3000 bytes)
+            // pacycoind: Reduce the exempted free transactions to 500 bytes (from Bitcoin's 3000 bytes)
             bool fAllowFree = (nBlockSize + nTxSize < 1500 || CTransaction::AllowFree(dPriority));
             int64 nMinFee = tx.GetMinFee(nBlockSize, fAllowFree, GMF_BLOCK);
 
@@ -3602,7 +3535,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey)
         printf("CreateNewBlock(): total size %lu\n", nBlockSize);
 
     }
-    pblock->vtx[0].vout[0].nValue = GetBlockValue(pindexPrev->nHeight+1, nFees, pindexPrev->GetBlockHash());
+    pblock->vtx[0].vout[0].nValue = GetBlockValue(pindexPrev->nHeight+1, nFees);
 
     // Fill in header
     pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
