@@ -2015,8 +2015,8 @@ bool LoadBlockIndex(bool fAllowNew)
             return false;
 
         // Genesis Block:
-		// hashGenesisBlock = 9b7bce58999062b63bfb18586813c42491fa32f4591d8d3043cb4fa9e551541b
-		// block.hashMerkleRoot = 6f80efd038566e1e3eab3e1d38131604d06481e77f2462235c6a9a94b1f8abf9
+		// hashGenesisBlock = 77b0525b72af9ca2f955dfb8e9dcbdf2e70495fc2bab856388e979a567f5998d
+		// block.hashMerkleRoot = 4f60341bbaa6449229f6c8e29e13d0638eda09b0573185a0648934098342113a
 		// CBlock(hash=9b7bce58999062b63bfb, PoW=caeb449903dc4f0e0ee2, ver=1, hashPrevBlock=00000000000000000000, 
 		//     hashMerkleRoot=6f80efd038, nTime=1369199888, nBits=1e0ffff0, nNonce=11288888, vtx=1)
 		//   CTransaction(hash=6f80efd038, ver=1, vin.size=1, vout.size=1, nLockTime=0)
@@ -2037,9 +2037,9 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1395424016;
+        block.nTime    = 1395444998;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 99943;
+        block.nNonce   = 573023;
 
 
         if (fTestNet)
@@ -2054,7 +2054,7 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("block.hashMerkleRoot = %s\n", block.hashMerkleRoot.ToString().c_str());
         assert(block.hashMerkleRoot == uint256("0x4f60341bbaa6449229f6c8e29e13d0638eda09b0573185a0648934098342113a"));
 
-if (true && block.GetHash() != hashGenesisBlock)
+if (false && block.GetHash() != hashGenesisBlock)
         {
             printf("Searching for genesis block...\n");
             // This will figure out a valid hash and Nonce if you're

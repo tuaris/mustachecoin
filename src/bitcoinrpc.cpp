@@ -284,10 +284,10 @@ Value stop(const Array& params, bool fHelp)
     if (fHelp || params.size() != 0)
         throw runtime_error(
             "stop\n"
-            "Stop pacycoin server.");
+            "Stop PacyCoin server.");
     // Shutdown will take long enough that the response should get back
     StartShutdown();
-    return "pacycoin server has now stopped running!";
+    return "PacyCoin server has now stopped running!";
 }
 
 
